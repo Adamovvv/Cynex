@@ -12,6 +12,14 @@ body {
     height: 100%;
     margin: 0;
 }
+:root {
+    --bottom-safe: calc(var(--lvh, 100vh) - var(--tg-viewport-height, 100vh));
+    --tabs-height: calc(64px + var(--bottom-safe));
+}
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(90, 90, 90, 0.3) transparent;
+}
 .orbitron-text {
   font-family: 'Orbitron', sans-serif;
   font-weight: 700;                /* Толщина шрифта от 400 до 900 */
@@ -37,10 +45,15 @@ button {
 }
 
 .main-info {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 16px;
+    padding-bottom: calc(24px + var(--tabs-height));
+    min-height: calc(100dvh + 1px);
+    overflow: hidden;
+    padding-top: 16px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 700px;
+    padding-left: 16px;
+    padding-right: 16px;
 }
 .pages-index-index {
     display: flex;
@@ -141,7 +154,7 @@ button {
     color: #aaa;
     height: 56px;
     padding: 0 20px;
-    border: none;
+    border: 1px solid #2a2a2b;
     border-radius: 8px;
 }
 
@@ -170,13 +183,16 @@ button {
     display: flex;
     flex: 1;
     flex-direction: column;
+    padding: 12px 10px 0;
     align-items: center;
     text-decoration: none;
     color: #929392;
 }
 .layout-tabs {
-    background: #000;
-    height: calc(72px + var(--lvh, 100vh) - var(--tg-viewport-height, 100%));
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    background: #000000a6;
+    height: var(--tabs-height);
     justify-content: space-around;
     align-items: center;
     margin-left: auto;
@@ -190,7 +206,13 @@ button {
     width: 24px;
 }
 .drop-div {
-    margin-bottom: 83px;
+    max-width: 700px;
+    position: absolute;
+    padding: 16px;
+    right: 0;
+    left: 0;
+    border-top: 1px solid #161617;
+    bottom: calc(64px + var(--tg-safe-area-inset-bottom, 0px));
 }
 .drop-game {
     display: grid;
@@ -522,7 +544,7 @@ button {
     left: 0;
     background: #000;
     border-top: 1px solid #161617;
-    bottom: calc(72px + var(--lvh, 100vh) - var(--tg-viewport-height, 100vh));
+    bottom: calc(64px + var(--tg-safe-area-inset-bottom, 0px));
 }
 .invite-button {
     width: 100%;
@@ -546,6 +568,7 @@ button {
     padding: 0 16px;
     align-items: center;
     justify-content: space-between;
+    border: 1px solid #2a2a2b;
     border-radius: 16px;
     background-color: #161617;
 }
@@ -569,6 +592,7 @@ button {
     display: grid;
     height: auto;
     align-items: center;
+    border: 1px solid #2a2a2b;
     border-radius: 16px;
     background: #161617;
     padding: 16px;
@@ -582,6 +606,7 @@ button {
     height: 56px;
     padding: 0 16px;
     align-items: center;
+    border: 1px solid #2a2a2b;
     border-radius: 16px;
     background-color: #161617;
 }
@@ -594,7 +619,7 @@ button {
     background-color: #161617;
     color: #aaa;
     padding: 16px;
-    border: none;
+    border: 1px solid #2a2a2b;
     border-radius: 8px;
 }
 .emoji {
