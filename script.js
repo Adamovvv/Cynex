@@ -148,7 +148,7 @@ function activateClaimButton() {
 function claimBonus() {
     const claimButton = document.querySelector('.claim-btn');
     claimButton.disabled = true;
-    claimButton.textContent = 'Wait for 6 hours';
+    claimButton.textContent = 'Claim';
     localStorage.setItem('lastClaimTime', Date.now());
 
     // Добавить логику начисления бонуса
