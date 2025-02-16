@@ -33,6 +33,8 @@ body {
   font-variation-settings: "wght" 700, "wdth" 100; /* Настройка толщины и ширины */
 }
 button {
+    background: none;
+    border: none;
     font-family: 'Orbitron', sans-serif;
     font-variation-settings: "wght" 700, "wdth" 100; /* Настройка переменной ширины */
 }
@@ -48,10 +50,9 @@ button {
     padding-bottom: calc(24px + var(--tabs-height));
     min-height: calc(100dvh + 1px);
     overflow: hidden;
-    margin-left: auto;
-    margin-right: auto;
     max-width: 700px;
 }
+
 .pages-index-index {
     display: flex;
     flex-direction: column;
@@ -275,6 +276,9 @@ button {
     background-size: cover;
     display: inline-block;
 }
+.add-ticket {
+
+}
 
 .avatar {
     background: #666;
@@ -435,6 +439,11 @@ button {
     vertical-align: middle;
     will-change: color,background;
 }
+.play-again:disabled {
+    background: #555;
+    color: #aaa;
+    cursor: not-allowed;
+}
 
 .kit-button span {
     font-size: 18px;
@@ -491,6 +500,7 @@ button {
 .tasks-list {
     position: relative;
     margin-top: 16px;
+    margin-bottom: 80px;
 }
 .pages-tasks-head img {
     width: 44px;
@@ -513,8 +523,8 @@ button {
     position: relative;
 }
 .pages-tasks-list-item-label .container img {
-    width: 24px;
-    height: 24px;
+    width: 36px;
+    height: 36px;
     flex-shrink: 0;
 }
 .pages-tasks-list-item-label .container .details {
@@ -625,8 +635,12 @@ button {
     border: 1px solid #2a2a2b;
     border-radius: 8px;
 }
-.emoji {
-    font-size: 24px;
+.lightning {
+    display: flex;
+}
+.lightning img {
+    width: 36px;
+    height: 36px;
 }
 .claim-btn {
     height: 36px;
@@ -641,4 +655,134 @@ button {
     background: #252726;
     color: #aaa;
     cursor: not-allowed;
+}
+
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.loader {
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-top: 5px solid #ffffff;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.freeze-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.triangle {
+    position: absolute;
+    background: rgba(173, 216, 230, 0.7); /* Цвет льда, можно поменять */
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+    animation: triangle-fade 2s ease-in-out infinite alternate;
+}
+
+.triangle.top-left {
+    top: 0;
+    left: 0;
+    width: 100px;
+    height: 100px;
+}
+
+.triangle.top-right {
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    transform: scaleX(-1);
+}
+
+.triangle.bottom-left {
+    bottom: 0;
+    left: 0;
+    width: 100px;
+    height: 100px;
+    transform: scaleY(-1);
+}
+
+.triangle.bottom-right {
+    bottom: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    transform: scale(-1, -1);
+}
+
+@keyframes triangle-fade {
+    0% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.reward-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.reward-content {
+    background: #161617;
+    color: #fff;
+    padding: 16px;
+    border-radius: 16px;
+    text-align: center;
+}
+
+.reward-content span {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.reward-content p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.reward-content button {
+    height: 36px;
+    padding: 0 24px;
+    border: none;
+    background: #22c55e;
+    color: #fff;
+    border-radius: 2rem;
+    margin-left: auto;
+    font-size: 14px;
+}
+
+.reward-content button:hover {
+    background: #ddd;
 }

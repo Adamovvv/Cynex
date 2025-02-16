@@ -9,6 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;900&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div id="loading" class="loading-screen">
+        <div class="loader"></div>
+    </div>    
     <div id="game" class="game">
         <div id="gameArea"></div>
         <div class="game-div">
@@ -36,10 +39,10 @@
                 </div>
             </div>
             <div class="end-game-buttons">
-                <button class="kit-button is-large is-secondary">
+                <button id="homeButton" class="kit-button is-large is-secondary">
                     <span>Home</span>
                 </button>
-                <button class="kit-button is-large is-primary" onclick="window.location.href='index.html'">
+                <button id="playAgainButton" class="kit-button is-large is-primary play-again">
                     <span>Play Again</span>
                 </button>
             </div>

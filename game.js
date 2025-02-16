@@ -1,6 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => {
-    initGame();
-});
+window.onload = () => {
+    const loadingScreen = document.getElementById('loading');
+    loadingScreen.style.display = 'none'; // Скрываем экран загрузки
+    initGame(); // Запускаем игру
+};
+
 
 function initGame() {
     const gameArea = document.getElementById('gameArea');
@@ -66,27 +69,51 @@ function handleElementClick(event) {
     }
 }
 
-    function freezeGame() {
-        isFrozen = true;
-        gameObjects.forEach((obj) => {
-            obj.style.animationPlayState = 'paused';
-        });
-        setTimeout(() => {
-            isFrozen = false;
-            gameObjects.forEach((obj) => {
-                obj.style.animationPlayState = 'running';
-            });
-        }, 2000);
-    }
+function freezeGame() {
+    isFrozen = true;
+    gameObjects.forEach((obj) => {
+        obj.style.animationPlayState = 'paused';
+    });
 
-    function removeElement(containerDiv) {
-        gameArea.removeChild(containerDiv);
-        const index = gameObjects.indexOf(containerDiv);
-        if (index > -1) {
-            gameObjects.splice(index, 1);
-        }
-        containerDiv.classList.add('clicked');
+    showFreezeEffect(); // Показать треугольники
+
+    setTimeout(() => {
+        isFrozen = false;
+        gameObjects.forEach((obj) => {
+            obj.style.animationPlayState = 'running';
+        });
+        hideFreezeEffect(); // Убрать треугольники
+    }, 2000);
+}
+
+function showFreezeEffect() {
+    const freezeOverlay = document.createElement('div');
+    freezeOverlay.className = 'freeze-overlay';
+    document.body.appendChild(freezeOverlay);
+
+    const positions = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
+    positions.forEach((pos) => {
+        const triangle = document.createElement('div');
+        triangle.className = `triangle ${pos}`;
+        freezeOverlay.appendChild(triangle);
+    });
+}
+
+function hideFreezeEffect() {
+    const freezeOverlay = document.querySelector('.freeze-overlay');
+    if (freezeOverlay) {
+        freezeOverlay.remove();
     }
+}
+
+function removeElement(containerDiv) {
+    gameArea.removeChild(containerDiv);
+    const index = gameObjects.indexOf(containerDiv);
+    if (index > -1) {
+        gameObjects.splice(index, 1);
+    }
+    containerDiv.classList.add('clicked');
+    }       
 }
 
 function createGameElement(gameArea, gameObjects) {
@@ -143,3 +170,30 @@ function showPlayAgainWindow(score) {
     document.getElementById('finalScore').textContent = `${score}`;
     playAgainWindow.classList.remove('hidden');
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const playAgainButton = document.querySelector('#playAgainButton');
+    const homeButton = document.querySelector('#homeButton');
+
+    // Проверка количества билетов и управление кнопкой "Play Again"
+    updatePlayAgainButton();
+
+    playAgainButton.addEventListener('click', () => {
+        let tickets = parseInt(localStorage.getItem('tickets')) || 0;
+        if (tickets > 0) {
+            localStorage.setItem('tickets', tickets - 1);
+            window.location.href = 'game.html'; // Перезапускаем игру
+        }
+    });
+
+    homeButton.addEventListener('click', () => {
+        window.location.href = 'index.html'; // Возвращаемся на главную
+    });
+
+    function updatePlayAgainButton() {
+        let tickets = parseInt(localStorage.getItem('tickets')) || 0;
+        if (tickets <= 0) {
+            playAgainButton.disabled = true;
+        }
+    }
+});

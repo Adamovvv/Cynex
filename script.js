@@ -14,16 +14,12 @@ function showMain() {
     const farmingBalance = localStorage.getItem('farmingBalance') || '0.00';
     const farmingTimer = localStorage.getItem('farmingTimer') || 0;
 
-    document.getElementById('displayUsername').textContent = username;
-    document.getElementById('balance').textContent = balance;
-    document.getElementById('tickets').textContent = tickets;
-    document.getElementById('farmingBalance').textContent = farmingBalance;
-    document.getElementById('farmingTimer').textContent = formatTime(farmingTimer);
-
-    // Запускаем интервал фарминга при загрузке страницы
-    if (farmingTimer > 0) {
-        startFarmingInterval();
-    }
+    // Проверяем, есть ли элемент перед записью в него
+    const usernameElem = document.getElementById('displayUsername');
+    const balanceElem = document.getElementById('balance');
+    const ticketsElem = document.getElementById('tickets');
+    const farmingBalanceElem = document.getElementById('farmingBalance');
+    const farmingTimerElem = document.getElementById('farmingTimer');
 }
 
 /**
@@ -52,76 +48,6 @@ function startGame() {
     }
 }
 
-/**
- * Начать фарминг
- */
-function startFarming() {
-    let farmingTimer = parseInt(localStorage.getItem('farmingTimer'));
-    if (farmingTimer === 0) { // Начать фарминг, если таймер равен 0
-        farmingTimer = 28800; // 8 часов в секундах
-        localStorage.setItem('farmingTimer', farmingTimer);
-        startFarmingInterval();
-    } else {
-        alert('Farming in progress. Please wait for the timer to reset.');
-    }
-}
-
-function startFarmingInterval() {
-    const farmingInterval = setInterval(() => {
-        let farmingTimer = parseInt(localStorage.getItem('farmingTimer'));
-        if (farmingTimer > 0) {
-            farmingTimer--;
-            localStorage.setItem('farmingTimer', farmingTimer);
-            document.getElementById('farmingTimer').textContent = formatTime(farmingTimer);
-            updateFarmingBalance();
-        } else {
-            clearInterval(farmingInterval);
-            completeFarming();
-        }
-    }, 1000);
-}
-
-/**
- * Обновить баланс фарминга
- */
-function updateFarmingBalance() {
-    let farmingBalance = parseFloat(localStorage.getItem('farmingBalance')) || 0;
-    let increment = 0.01; // Увеличиваем баланс на 0.01 каждый раз
-
-    farmingBalance += increment;
-
-    // Округляем баланс до двух знаков после запятой
-    farmingBalance = farmingBalance.toFixed(2);
-
-    localStorage.setItem('farmingBalance', farmingBalance);
-    document.getElementById('farmingBalance').textContent = farmingBalance;
-}
-
-
-/**
- * Форматировать время
- * @param {number} seconds - количество секунд
- * @returns {string} - отформатированное время
- */
-function formatTime(seconds) {
-    const h = Math.floor(seconds / 3600);
-    const m = Math.floor((seconds % 3600) / 60);
-    const s = seconds % 60;
-    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-}
-
-/**
- * Завершить фарминг и обновить баланс
- */
-function completeFarming() {
-    let balance = parseInt(localStorage.getItem('balance')) || 0;
-    balance += parseFloat(localStorage.getItem('farmingBalance'));
-    localStorage.setItem('balance', balance);
-    document.getElementById('balance').textContent = balance;
-    localStorage.setItem('farmingTimer', 0); // Сбросить таймер до 0
-    localStorage.setItem('farmingBalance', '0.00');
-}
-
 // Таймер для daily-bonus
 function startDailyBonusTimer() {
     const lastClaimTime = localStorage.getItem('lastClaimTime');
@@ -141,6 +67,9 @@ function activateClaimButton() {
     const claimButton = document.querySelector('.claim-btn');
     claimButton.disabled = false;
     claimButton.textContent = 'Claim';
+    // Изменяем текст на "Забирайте бонус"
+    const bonusText = document.querySelector('.daily-bonus div span:first-child');
+    bonusText.textContent = 'Забирайте бонус';
     document.getElementById('bonusTimer').textContent = '00:00:00';
     claimButton.onclick = claimBonus;
 }
@@ -150,10 +79,14 @@ function claimBonus() {
     claimButton.disabled = true;
     claimButton.textContent = 'Claim';
     localStorage.setItem('lastClaimTime', Date.now());
+    
+    // Возвращаем исходный текст
+    const bonusText = document.querySelector('.daily-bonus div span:first-child');
+    bonusText.textContent = 'Следующий клейм через:';
 
-    // Добавить логику начисления бонуса
+    // Остальной код функции без изменений
     let balance = parseInt(localStorage.getItem('balance')) || 0;
-    balance += 100; // Пример начисления бонуса
+    balance += 100;
     localStorage.setItem('balance', balance);
     document.getElementById('balance').textContent = balance;
 
@@ -169,16 +102,22 @@ function updateBonusTimer(remainingTime) {
             clearInterval(timerInterval);
             activateClaimButton();
         } else {
-            timerSpan.textContent = formatTimeWithoutSeconds(Math.floor(remainingTime / 1000));
+            timerSpan.textContent = formatTime(Math.floor(remainingTime / 1000));
         }
     }, 1000);
 }
 
 // Форматирование времени (часы:минуты:секунды)
-function formatTimeWithoutSeconds(seconds) {
+/**
+ * Форматировать время
+ * @param {number} seconds - количество секунд
+ * @returns {string} - отформатированное время
+ */
+function formatTime(seconds) {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
-    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+    const s = seconds % 60;
+    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
 
 
@@ -186,3 +125,49 @@ function formatTimeWithoutSeconds(seconds) {
 document.addEventListener('DOMContentLoaded', () => {
     startDailyBonusTimer();
 });
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    checkDailyReward();
+    checkTicketReset();
+    showMain();
+});
+
+/**
+ * Проверить и показать ежедневную награду
+ */
+function checkDailyReward() {
+    const lastRewardDate = localStorage.getItem('lastRewardDate');
+    const today = new Date().toDateString(); // Используем строковое представление даты для простоты сравнения
+
+    if (lastRewardDate !== today) {
+        showDailyReward();
+        localStorage.setItem('lastRewardDate', today);
+    }
+}
+
+/**
+ * Показать окно с наградой
+ */
+function showDailyReward() {
+    const rewardAmount = 5; // Количество билетов, которое мы дадим пользователю
+    let tickets = parseInt(localStorage.getItem('tickets')) || 0;
+    tickets += rewardAmount;
+    localStorage.setItem('tickets', tickets);
+
+    const rewardModal = document.createElement('div');
+    rewardModal.classList.add('reward-modal');
+    rewardModal.innerHTML = `
+        <div class="reward-content">
+            <span>Ежедневная награда!</span>
+            <p>Вы получили ${rewardAmount} билетов!</p>
+            <button id="closeRewardModal">Claim!</button>
+        </div>
+    `;
+    document.body.appendChild(rewardModal);
+
+    document.getElementById('closeRewardModal').addEventListener('click', () => {
+        rewardModal.remove();
+        document.getElementById('tickets').textContent = tickets;
+    });
+}
