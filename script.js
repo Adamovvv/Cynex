@@ -8,8 +8,19 @@ document.addEventListener('DOMContentLoaded', () => {
  * Показать основную страницу
  */
 function showMain() {
+    const user = {
+        id: localStorage.getItem('tg_user_id'),
+        firstName: localStorage.getItem('tg_first_name'),
+        username: localStorage.getItem('tg_username'),
+        avatar: localStorage.getItem('tg_avatar')
+    };
+    // Отображаем имя пользователя
+    const displayName = user.firstName || user.username || 'Player';
+    document.getElementById('displayUsername').textContent = displayName;
+    
     const avatar = localStorage.getItem('tg_avatar') || 'images/default_avatar.png';
-    document.getElementById('avatar').src = avatar;
+    // Обновляем аватар
+    document.getElementById('avatar').src = user.avatar || 'images/default_avatar.png';
     const username = localStorage.getItem('username');
     const balance = localStorage.getItem('balance') || 0;
     const tickets = localStorage.getItem('tickets') || 3;

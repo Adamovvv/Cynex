@@ -200,7 +200,6 @@ button {
     max-width: 700px;
     padding-left: 16px;
     padding-right: 16px;
-    padding-bottom: env(safe-area-inset-bottom);
 }
 
 .layout-tabs svg {
@@ -826,4 +825,12 @@ button {
 
 .leaderboard-table th {
     background: #222;
+}
+
+.avatar-small {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 8px;
 }
