@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
  * Показать основную страницу
  */
 function showMain() {
+    const avatar = localStorage.getItem('tg_avatar') || 'images/default_avatar.png';
+    document.getElementById('avatar').src = avatar;
     const username = localStorage.getItem('username');
     const balance = localStorage.getItem('balance') || 0;
     const tickets = localStorage.getItem('tickets') || 3;
@@ -22,6 +24,12 @@ function showMain() {
     const farmingTimerElem = document.getElementById('farmingTimer');
 
     updateFarmingButtonText(); // Добавляем вызов функции
+}
+
+// Добавить в script.js
+function getUserKey(key) {
+    const userId = localStorage.getItem('tg_user_id') || 'guest';
+    return `${userId}_${key}`;
 }
 
 /**

@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Telegram Bot App</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;900&display=swap" rel="stylesheet">
 </head>
-<body>
+<body style="padding-bottom: env(safe-area-inset-bottom);">
     <div id="app">
         <div id="main" class="page">
             <div class="main-info">
@@ -77,5 +77,19 @@
     </div>
     <script src="script.js"></script>
     <script src="farming.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        // Инициализация Web App
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        
+        // Сохраняем данные пользователя
+        const user = tg.initDataUnsafe.user;
+        if (user) {
+            localStorage.setItem('tg_user_id', user.id);
+            localStorage.setItem('tg_username', user.username);
+            localStorage.setItem('tg_avatar', user.photo_url);
+        }
+    </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
  */
 function startFarming() {
     console.log('startFarming called'); // Добавляем отладочное сообщение
-    let farmingTimer = parseInt(localStorage.getItem('farmingTimer')) || 0;
+    let farmingTimer = parseInt(localStorage.getItem(getUserKey('farmingTimer'))) || 0;
     if (farmingTimer === 0) {
         // Установить таймер на 8 часов (28800 секунд)
         farmingTimer = 28800;
@@ -58,9 +58,9 @@ function updateFarmingBalance() {
  * Завершить фарминг и обновить общий баланс
  */
 function completeFarming() {
-    let balance = parseInt(localStorage.getItem('balance')) || 0;
+    localStorage.getItem(getUserKey('balance'))
     balance += parseFloat(localStorage.getItem('farmingBalance'));
-    localStorage.setItem('balance', balance);
+    localStorage.setItem(getUserKey('balance'), balance);
     document.getElementById('balance').textContent = balance;
     localStorage.setItem('farmingTimer', 0); // Сбросить таймер до 0
     localStorage.setItem('farmingBalance', '0.00');

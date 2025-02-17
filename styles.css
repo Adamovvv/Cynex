@@ -44,6 +44,7 @@ button {
     flex-direction: column;
     flex-grow: 1;
     overflow: hidden;
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 .main-info {
@@ -199,6 +200,7 @@ button {
     max-width: 700px;
     padding-left: 16px;
     padding-right: 16px;
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 .layout-tabs svg {
@@ -643,8 +645,8 @@ button {
     display: flex;
 }
 .lightning img {
-    width: 36px;
-    height: 36px;
+    width: 24px;
+    height: 24px;
 }
 .claim-btn {
     height: 36px;
