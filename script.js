@@ -146,3 +146,13 @@ function formatTime(seconds) {
 document.addEventListener('DOMContentLoaded', () => {
     startDailyBonusTimer();
 });
+
+function updateBalanceDisplay() {
+    let balance = parseFloat(localStorage.getItem('balance')) || 0;
+    document.getElementById('balance').textContent = balance;
+}
+
+// Вызываем функцию при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    updateBalanceDisplay();
+});

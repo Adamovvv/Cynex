@@ -58,7 +58,7 @@ function updateFarmingBalance() {
  * Завершить фарминг и обновить общий баланс
  */
 function completeFarming() {
-    localStorage.getItem(getUserKey('balance'))
+    let balance = parseFloat(localStorage.getItem(getUserKey('balance'))) || 0;
     balance += parseFloat(localStorage.getItem('farmingBalance'));
     localStorage.setItem(getUserKey('balance'), balance);
     document.getElementById('balance').textContent = balance;
