@@ -20,6 +20,8 @@ function showMain() {
     const ticketsElem = document.getElementById('tickets');
     const farmingBalanceElem = document.getElementById('farmingBalance');
     const farmingTimerElem = document.getElementById('farmingTimer');
+
+    updateFarmingButtonText(); // Добавляем вызов функции
 }
 
 /**
@@ -125,49 +127,3 @@ function formatTime(seconds) {
 document.addEventListener('DOMContentLoaded', () => {
     startDailyBonusTimer();
 });
-
-
-document.addEventListener('DOMContentLoaded', () => {
-    checkDailyReward();
-    checkTicketReset();
-    showMain();
-});
-
-/**
- * Проверить и показать ежедневную награду
- */
-function checkDailyReward() {
-    const lastRewardDate = localStorage.getItem('lastRewardDate');
-    const today = new Date().toDateString(); // Используем строковое представление даты для простоты сравнения
-
-    if (lastRewardDate !== today) {
-        showDailyReward();
-        localStorage.setItem('lastRewardDate', today);
-    }
-}
-
-/**
- * Показать окно с наградой
- */
-function showDailyReward() {
-    const rewardAmount = 5; // Количество билетов, которое мы дадим пользователю
-    let tickets = parseInt(localStorage.getItem('tickets')) || 0;
-    tickets += rewardAmount;
-    localStorage.setItem('tickets', tickets);
-
-    const rewardModal = document.createElement('div');
-    rewardModal.classList.add('reward-modal');
-    rewardModal.innerHTML = `
-        <div class="reward-content">
-            <span>Ежедневная награда!</span>
-            <p>Вы получили ${rewardAmount} билетов!</p>
-            <button id="closeRewardModal">Claim!</button>
-        </div>
-    `;
-    document.body.appendChild(rewardModal);
-
-    document.getElementById('closeRewardModal').addEventListener('click', () => {
-        rewardModal.remove();
-        document.getElementById('tickets').textContent = tickets;
-    });
-}

@@ -2,6 +2,7 @@
  * Начать фарминг
  */
 function startFarming() {
+    console.log('startFarming called'); // Добавляем отладочное сообщение
     let farmingTimer = parseInt(localStorage.getItem('farmingTimer')) || 0;
     if (farmingTimer === 0) {
         // Установить таймер на 8 часов (28800 секунд)
