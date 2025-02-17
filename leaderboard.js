@@ -1,10 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const leaderboardData = [
-        { id: 1, firstName: 'John', username: 'john123', score: 1000, avatar: 'avatar1.jpg' },
-        { id: 2, firstName: 'Alice', username: 'alice456', score: 950, avatar: 'avatar2.jpg' },
-        { id: 3, firstName: 'Bob', username: 'bob789', score: 900, avatar: 'avatar3.jpg' },
-        // Add more players as needed
-    ];
+    // Получаем данные пользователя из localStorage
+    const user = {
+        id: localStorage.getItem('tg_user_id'),
+        firstName: localStorage.getItem('tg_first_name'),
+        username: localStorage.getItem('tg_username'),
+        avatar: localStorage.getItem('tg_avatar'),
+        score: Math.floor(Math.random() * 1000) // Здесь можно заменить на реальные данные
+    };
+
+    let leaderboardData = JSON.parse(localStorage.getItem('leaderboard')) || [];
+
+    // Если пользователя нет в списке, добавляем его
+    if (!leaderboardData.some(p => p.id === user.id)) {
+        leaderboardData.push(user);
+        localStorage.setItem('leaderboard', JSON.stringify(leaderboardData));
+    }
 
     renderLeaderboard(leaderboardData);
 });
@@ -13,6 +23,7 @@ function renderLeaderboard(data) {
     const tbody = document.querySelector('.leaderboard-table tbody');
     tbody.innerHTML = '';
 
+    // Сортируем по убыванию очков
     data.sort((a, b) => b.score - a.score);
 
     data.forEach((player, index) => {
@@ -21,7 +32,7 @@ function renderLeaderboard(data) {
         row.innerHTML = `
             <td>${index + 1}</td>
             <td>
-                <img src="${player.avatar}" alt="${player.firstName}" class="avatar-small">
+                <img src="${player.avatar || 'images/default_avatar.png'}" alt="${player.firstName}" class="avatar-small">
                 ${player.firstName || player.username}
             </td>
             <td>${player.score}</td>
@@ -29,15 +40,21 @@ function renderLeaderboard(data) {
 
         tbody.appendChild(row);
     });
+
+    // Обновляем топ-3 игроков
+    updateTopThree(data);
 }
 
-const tg = window.Telegram.WebApp;
-tg.expand();
+function updateTopThree(data) {
+    const topPlayers = data.slice(0, 3);
+    const positions = ['first', 'second', 'third'];
 
-if (tg.initDataUnsafe.user) {
-    const user = tg.initDataUnsafe.user;
-    localStorage.setItem('tg_user_id', user.id);
-    localStorage.setItem('tg_first_name', user.first_name);
-    localStorage.setItem('tg_username', user.username);
-    localStorage.setItem('tg_avatar', user.photo_url);
+    topPlayers.forEach((player, index) => {
+        const playerCard = document.querySelector(`.player-card.${positions[index]}`);
+        if (playerCard) {
+            playerCard.querySelector('.avatar').src = player.avatar || 'images/default_avatar.png';
+            playerCard.querySelector('.name').textContent = player.firstName || player.username;
+            playerCard.querySelector('.score').textContent = player.score;
+        }
+    });
 }
