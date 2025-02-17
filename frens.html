@@ -68,5 +68,19 @@
         </div>
     </div>
     <script src="script.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        // Инициализация Web App
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        
+        // Сохраняем данные пользователя
+        const user = tg.initDataUnsafe.user;
+        if (user) {
+            localStorage.setItem('tg_user_id', user.id);
+            localStorage.setItem('tg_username', user.username);
+            localStorage.setItem('tg_avatar', user.photo_url);
+        }
+    </script>
 </body>
 </html>
