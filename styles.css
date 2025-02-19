@@ -42,13 +42,15 @@ button {
 .page {
     display: flex;
     flex-direction: column;
+    height: 100vh;
     flex-grow: 1;
     overflow: hidden;
     padding-bottom: env(safe-area-inset-bottom);
 }
 
 .main-info {
-    padding-bottom: calc(24px + var(--tabs-height));
+    padding-bottom: 0;
+    margin-bottom: var(--tabs-height);
     min-height: calc(100dvh + 1px);
     overflow: hidden;
     max-width: 700px;
@@ -189,16 +191,18 @@ button {
     color: #929392;
 }
 .layout-tabs {
+    position: fixed;
+    bottom: env(safe-area-inset-bottom, 0px);
+    left: 0;
+    right: 0;
+    height: var(--tabs-height);
+    background: #000000a6;
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
-    background: #000000a6;
-    height: var(--tabs-height);
+    display: flex;
     justify-content: space-around;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 700px;
-    padding-left: 16px;
-    padding-right: 16px;
+    align-items: center;
+    z-index: 1000;
 }
 
 .layout-tabs svg {
